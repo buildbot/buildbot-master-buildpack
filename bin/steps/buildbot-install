@@ -13,22 +13,19 @@ if [ ! "$BB_WWW" ]; then
     BB_WWW='base'
 fi
 
-if [ -d "$CACHE_DIR/buildbot" ]; then
-    cd "$CACHE_DIR/buildbot" 
+if [ -d "buildbot" ]; then
     git fetch | cleanup | indent
     git checkout "origin/$BB_BRANCH" | cleanup | indent
     git checkout -B "$BB_BRANCH" | cleanup | indent
-    cd -
 else
-    git clone -b "$BB_BRANCH" "$BB_REPO" "$CACHE_DIR/buildbot"
+    git clone -b "$BB_BRANCH" "$BB_REPO" "buildbot"
 fi
 
 /app/.heroku/python/bin/pip install mock | cleanup | indent
-/app/.heroku/python/bin/pip install -e "$CACHE_DIR/buildbot/master" | cleanup | indent
-/app/.heroku/python/bin/pip install -e "$CACHE_DIR/buildbot/pkg" | cleanup | indent
-/app/.heroku/python/bin/pip install -e "$CACHE_DIR/buildbot/www/$BB_WWW" | cleanup | indent
+/app/.heroku/python/bin/pip install -e "buildbot/master" | cleanup | indent
+/app/.heroku/python/bin/pip install -e "buildbot/pkg" | cleanup | indent
+/app/.heroku/python/bin/pip install -e "buildbot/www/$BB_WWW" | cleanup | indent
 
-cd "$BUILD_DIR"
 
 /app/.heroku/python/bin/buildbot create-master master
 
