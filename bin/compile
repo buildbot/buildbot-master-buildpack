@@ -16,10 +16,8 @@ ROOT_DIR=$(dirname $BIN_DIR)
 BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
-HEROKU_DIR="$BUILD_DIR/.heroku"
-
-
 CACHED_DIRS=".heroku"
+HEROKU_DIR="$BUILD_DIR/.heroku"
 
 # Static configurations for virtualenv caches.
 VIRTUALENV_LOC=".heroku/venv"
@@ -144,11 +142,11 @@ set -e
 
 mkdir -p $(dirname $PROFILE_PATH)
 
-# Install Python.
-source $BIN_DIR/steps/python
-
 # Install Nodejs.
 source $BIN_DIR/steps/nodejs
+
+# Install Python.
+source $BIN_DIR/steps/python
 
 # Sanity check for setuptools/distribute.
 source $BIN_DIR/steps/setuptools
