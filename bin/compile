@@ -36,7 +36,7 @@ SETUPTOOLS_VERSION="11.3.1"
 export PATH=$PATH:$ROOT_DIR/vendor/bpwatch
 LOGPLEX_KEY="t.b90d9d29-5388-4908-9737-b4576af1d4ce"
 export BPWATCH_STORE_PATH=$CACHE_DIR/bpwatch.json
-BUILDPACK_VERSION=v28
+BUILDPACK_VERSION=v1
 
 # Setup pip-pop (pip-diff)
 export PATH=$PATH:$ROOT_DIR/vendor/pip-pop
@@ -154,24 +154,8 @@ source $BIN_DIR/steps/python
 # Sanity check for setuptools/distribute.
 source $BIN_DIR/steps/setuptools
 
-# Uninstall removed dependencies with Pip.
-source $BIN_DIR/steps/pip-uninstall
-
-# Mercurial support.
-source $BIN_DIR/steps/mercurial
-
-# Pylibmc support.
-source $BIN_DIR/steps/pylibmc
-
-# Libffi support.
-source $BIN_DIR/steps/cryptography
-
-# Install dependencies with Pip.
-source $BIN_DIR/steps/pip-install
-
-# Django collectstatic support.
-sub-env $BIN_DIR/steps/collectstatic
-
+# install buildbot
+source $BIN_DIR/steps/buildbot-install
 
 # ### Finalize
 #

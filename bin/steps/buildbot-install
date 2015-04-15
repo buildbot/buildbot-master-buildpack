@@ -1,0 +1,30 @@
+# Install dependencies with Pip.
+puts-step "Installing buildbot dependencies"
+
+[ ! "$FRESH_PYTHON" ] && bpwatch start buildbot_install
+[ "$FRESH_PYTHON" ] && bpwatch start buildbot_install_first
+
+if [ ! "$BB_BRANCH" ]; then
+    BB_BRANCH = 'master'
+fi
+
+if [ ! "$BB_REPO" ]; then
+    BB_BRANCH='https//github.com/buildbot/buildbot'
+fi
+
+if [ ! "$BB_WWW" ]; then
+    BB_WWW='base'
+fi
+
+git clone -b "$BB_BRANCH" "$BB_REPO" "$CACHE_DIR/buildbot"
+
+/app/.heroku/python/bin/pip install mock | cleanup | indent
+/app/.heroku/python/bin/pip install -e "$CACHE_DIR/buildbot/master" | cleanup | indent
+/app/.heroku/python/bin/pip install -e "$CACHE_DIR/buildbot/pkg" | cleanup | indent
+/app/.heroku/python/bin/pip install -e "$CACHE_DIR/buildbot/www/$BB_WWW" | cleanup | indent
+
+
+[ ! "$FRESH_PYTHON" ] && bpwatch stop buildbot_install
+[ "$FRESH_PYTHON" ] && bpwatch stop buildbot_install_first
+
+echo
