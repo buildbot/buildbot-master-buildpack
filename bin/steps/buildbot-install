@@ -1,9 +1,6 @@
 # Install dependencies with Pip.
 puts-step "Installing buildbot dependencies"
 
-[ ! "$FRESH_PYTHON" ] && bpwatch start buildbot_install
-[ "$FRESH_PYTHON" ] && bpwatch start buildbot_install_first
-
 if [ ! "$BB_BRANCH" ]; then
     BB_BRANCH = 'master'
 fi
@@ -18,10 +15,13 @@ fi
 
 if [ -d "$CACHE_DIR/buildbot" ]; then
     cd "$CACHE_DIR/buildbot" 
-    git fetch
-    git checkout "origin/$BB_BRANCH"
-    git checkout -B "$BB_BRANCH"
+    git fetch | cleanup | indent
+    git checkout "origin/$BB_BRANCH" | cleanup | indent
+    git checkout -B "$BB_BRANCH" | cleanup | indent
     cd -
+    
+    /app/.heroku/python/bin/pip uninstall 'buildbot-www' | cleanup | indent
+    /app/.heroku/python/bin/pip install -e "$CACHE_DIR/buildbot/www/$BB_WWW" | cleanup | indent
 else
     git clone -b "$BB_BRANCH" "$BB_REPO" "$CACHE_DIR/buildbot"
 
@@ -29,11 +29,13 @@ else
     /app/.heroku/python/bin/pip install -e "$CACHE_DIR/buildbot/master" | cleanup | indent
     /app/.heroku/python/bin/pip install -e "$CACHE_DIR/buildbot/pkg" | cleanup | indent
     /app/.heroku/python/bin/pip install -e "$CACHE_DIR/buildbot/www/$BB_WWW" | cleanup | indent
-
 fi
 
+cd "$BUILD_DIR"
 
-[ ! "$FRESH_PYTHON" ] && bpwatch stop buildbot_install
-[ "$FRESH_PYTHON" ] && bpwatch stop buildbot_install_first
+/app/.heroku/python/bin/buildbot create-master master
 
+if [ ! -f "$BUILD_DIR/master.cfg" ]; then
+    cp "$ROOT_DIR/vendor/master.cfg.sample" "$BUILD_DIR/master.cfg"
+fi
 echo
