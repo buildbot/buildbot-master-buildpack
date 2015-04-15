@@ -1,6 +1,7 @@
 # -*- python -*-
 # ex: set syntax=python:
 
+import os
 from buildbot.plugins import *
 
 # This is a sample buildmaster config file. It must be installed as
@@ -95,7 +96,7 @@ c['titleURL'] = "https://launchpad.net/pyflakes"
 c['buildbotURL'] = "http://localhost:8020/"
 
 # minimalistic config to activate new web UI
-c['www'] = dict(port=8020,
+c['www'] = dict(port=os.environ.get('PORT', 8020),
                 plugins=dict())
 
 ####### DB URL
