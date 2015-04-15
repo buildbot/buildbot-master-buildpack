@@ -1,0 +1,7 @@
+# Install dependencies with Pip.
+puts-step "Installing NodeJS and NPM"
+
+install_node ""
+install_npm
+
+echo

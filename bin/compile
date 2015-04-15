@@ -16,6 +16,7 @@ ROOT_DIR=$(dirname $BIN_DIR)
 BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
+HEROKU_DIR="$BUILD_DIR/.heroku"
 
 
 CACHED_DIRS=".heroku"
@@ -57,7 +58,7 @@ bpwatch start compile
 
 
 # We'll need to send these statics to other scripts we `source`.
-export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH
+export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH HEROKU_DIR
 
 # Syntax sugar.
 source $BIN_DIR/utils
@@ -103,11 +104,6 @@ bpwatch start pre_compile
   source $BIN_DIR/steps/hooks/pre_compile
 bpwatch stop pre_compile
 
-# If no requirements given, assume `setup.py develop`.
-if [ ! -f requirements.txt ]; then
-  echo "-e ." > requirements.txt
-fi
-
 # Sticky runtimes.
 if [ -f $CACHE_DIR/.heroku/python-version ]; then
   DEFAULT_PYTHON_VERSION=$(cat $CACHE_DIR/.heroku/python-version)
@@ -150,6 +146,9 @@ mkdir -p $(dirname $PROFILE_PATH)
 
 # Install Python.
 source $BIN_DIR/steps/python
+
+# Install Nodejs.
+source $BIN_DIR/steps/nodejs
 
 # Sanity check for setuptools/distribute.
 source $BIN_DIR/steps/setuptools

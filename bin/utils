@@ -91,3 +91,42 @@ sub-env() {
 
   )
 }
+
+install_node() {
+  local node_engine=$1
+
+  # Resolve non-specific node versions using semver.herokuapp.com
+  if ! [[ "$node_engine" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    puts-step "Resolving node version ${node_engine:-(latest stable)} via semver.io..."
+    node_engine=$(curl --silent --get --data-urlencode "range=${node_engine}" https://semver.herokuapp.com/node/resolve)
+  fi
+
+  # Download node from Heroku's S3 mirror of nodejs.org/dist
+  puts-step "Downloading and installing node $node_engine..."
+  node_url="http://s3pository.heroku.com/node/v$node_engine/node-v$node_engine-linux-x64.tar.gz"
+  curl $node_url -s -o - | tar xzf - -C /tmp
+
+  # Move node (and npm) into .heroku/node and make them executable
+  mv /tmp/node-v$node_engine-linux-x64/* $HEROKU_DIR/node
+  chmod +x $HEROKU_DIR/node/bin/*
+  PATH=$HEROKU_DIR/node/bin:$PATH
+}
+
+install_npm() {
+  # Optionally bootstrap a different npm version
+  if [ "$npm_engine" != "" ]; then
+    if ! [[ "$npm_engine" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+      puts-step "Resolving npm version ${npm_engine} via semver.io..."
+      npm_engine=$(curl --silent --get --data-urlencode "range=${npm_engine}" https://semver.herokuapp.com/npm/resolve)
+    fi
+    if [[ `npm --version` == "$npm_engine" ]]; then
+      puts-step "npm `npm --version` already installed with node"
+    else
+      puts-step "Downloading and installing npm $npm_engine (replacing version `npm --version`)..."
+      npm install --unsafe-perm --quiet -g npm@$npm_engine 2>&1 >/dev/null | indent
+    fi
+    puts-warn "Old npm version: `npm --version`"
+  else
+    puts-step "Using default npm version: `npm --version`"
+  fi
+}
