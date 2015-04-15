@@ -20,7 +20,7 @@ if [ -d "$CACHE_DIR/buildbot" ]; then
     git checkout -B "$BB_BRANCH" | cleanup | indent
     cd -
     
-    /app/.heroku/python/bin/pip uninstall 'buildbot-www' | cleanup | indent
+    /app/.heroku/python/bin/pip uninstall -q -y 'buildbot-www' || true 
     /app/.heroku/python/bin/pip install -e "$CACHE_DIR/buildbot/www/$BB_WWW" | cleanup | indent
 else
     git clone -b "$BB_BRANCH" "$BB_REPO" "$CACHE_DIR/buildbot"
