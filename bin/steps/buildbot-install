@@ -32,7 +32,10 @@ cd "$BUILD_DIR"
 
 /app/.heroku/python/bin/buildbot create-master master
 
+puts-step 'Copying config file'
 if [ ! -f "$BUILD_DIR/master.cfg" ]; then
-    cp "$ROOT_DIR/vendor/master.cfg.sample" "$BUILD_DIR/master.cfg"
+    cp "$ROOT_DIR/vendor/master.cfg.sample" "$BUILD_DIR/master/master.cfg"
+else
+    cp "$BUILD_DIR/master.cfg" "$BUILD_DIR/master/master.cfg"
 fi
 echo
