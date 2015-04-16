@@ -34,4 +34,7 @@ if [ ! -f "$BUILD_DIR/master.cfg" ]; then
 else
     cp "$BUILD_DIR/master.cfg" "$BUILD_DIR/master/master.cfg"
 fi
+if [ ! -f "$BUILD_DIR/Procfile" ]; then
+    cp "$ROOT_DIR/vendor/Procfile.sample" "$BUILD_DIR/Procfile"
+fi
 echo
