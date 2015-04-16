@@ -37,4 +37,6 @@ fi
 if [ ! -f "$BUILD_DIR/Procfile" ]; then
     cp "$ROOT_DIR/vendor/Procfile.sample" "$BUILD_DIR/Procfile"
 fi
-echo
+if [ ! -f "$BUILD_DIR/CHECKS" ]; then
+    echo "/" > "$BUILD_DIR/CHECKS"
+fi
