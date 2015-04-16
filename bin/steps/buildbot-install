@@ -15,8 +15,7 @@ fi
 
 if [ -d "buildbot" ]; then
     git fetch | cleanup | indent
-    git checkout "origin/$BB_BRANCH" | cleanup | indent
-    git checkout -B "$BB_BRANCH" | cleanup | indent
+    git checkout "origin/$BB_BRANCH" -B "$BB_BRANCH" | cleanup | indent
 else
     git clone -b "$BB_BRANCH" "$BB_REPO" "buildbot"
 fi

@@ -4,5 +4,3 @@ puts-step "Installing NodeJS and NPM"
 mkdir -p "$HEROKU_DIR/node"
 install_node ""
 install_npm
-
-echo
