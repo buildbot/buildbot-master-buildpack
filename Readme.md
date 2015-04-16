@@ -1,52 +1,62 @@
-Heroku buildpack: Python
+Heroku buildpack: Buildbot-master
 ========================
 
-This is a [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks) for Python apps, powered by [pip](http://www.pip-installer.org/).
+This is a buildpack intended to deploying [Buildbot](http://buildbot.net)'s master application on
+[Heroku](https://heroku.com) or VPS equipmented with [Dokku](https://github.com/progrium/dokku).
 
+This buildpack is modified from Heroku's [Python buildpack](https://github.com/heroku/heroku-buildpack-python) and
+[NodeJS buildpack](https://github.com/heroku/heroku-buildpack-python). It will install the latest version of Buildbot
+from its Github repo instead of the stable version on PyPI.
 
 Usage
 -----
 
 Example usage:
 
-    $ ls
-    Procfile  requirements.txt  web.py
+The only things you should provide is an empty git repo with a `.env` file.
 
-    $ heroku create --buildpack git://github.com/heroku/heroku-buildpack-python.git
+    $ cat .env
+    export BB_REPO='https://github.com/buildbot/buildbot'
+    export BB_BRANCH='master'
+    export BB_WWW='base'
+    export BUILDPACK_URL='https://github.com/shanzi/buildbot-master-buildpack.git'
 
+You can assign different repo, branch and frondend app to install by changing `BB_REPO`,
+`BB_BRANCH` and `BB_WWW`, which are optional.
+ The `BUILDPACK_URL` variable is required to deploy with Dokku.
+
+For deploying on heroku
+
+    $ heroku create --buildpack git://github.com/shanzi/buildbot-master-buildpack.git
     $ git push heroku master
     ...
-    -----> Python app detected
-    -----> Installing runtime (python-2.7.9)
-    -----> Installing dependencies using pip
-           Downloading/unpacking requests (from -r requirements.txt (line 1))
-           Installing collected packages: requests
-           Successfully installed requests
-           Cleaning up...
-    -----> Discovering process types
-           Procfile declares types -> (none)
+    -----> Building buildbot from buildstep...
+    -----> Fetching custom buildpack
+    -----> app detected
+    -----> Installing NodeJS and NPM
+    -----> Resolving node version (latest stable) via semver.io...
+    -----> Downloading and installing node 0.12.2...
+    -----> Using default npm version: 2.7.4
+    -----> Installing buildbot dependencies
+    -----> Procfile declares types -> web
 
-You can also add it to upcoming builds of an existing application:
+Deploying with Dokku is the same easy:
+    
+    $ git remote add dokku dokku@<your server>:buildbot
+    $ git push dokku master
 
-    $ heroku config:add BUILDPACK_URL=git://github.com/heroku/heroku-buildpack-python.git
+You can override the default `master.cfg` by putting one in the root folder of repo.
 
-The buildpack will detect your app as Python if it has the file `requirements.txt` in the root.
-
-It will use Pip to install your dependencies, vendoring a copy of the Python runtime into your slug.
+    $ ls
+    master.cfg
 
 Specify a Runtime
 -----------------
 
-You can also provide arbitrary releases Python with a `runtime.txt` file.
+You can also provide other releases of Python with a `runtime.txt` file.
 
     $ cat runtime.txt
-    python-3.4.3
+    python-2.6.9
 
-Runtime options include:
-
-- python-2.7.9
-- python-3.4.3
-- pypy-2.4.0 (unsupported, experimental)
-- pypy3-2.4.0 (unsupported, experimental)
-
-Other [unsupported runtimes](https://github.com/heroku/heroku-buildpack-python/tree/master/builds/runtimes) are available as well.
+As buildbot's master only supports to run on Python 2.6.x to 2.7.x, 
+so runtime for Python 3 is not supported by this buildpack.
