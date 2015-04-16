@@ -1,7 +1,7 @@
 Heroku buildpack: Buildbot-master
 ========================
 
-This is a buildpack intended to deploying [Buildbot](http://buildbot.net)'s master application on
+This is a buildpack intended to deploy [Buildbot](http://buildbot.net)'s master application on
 [Heroku](https://heroku.com) or VPS equipmented with [Dokku](https://github.com/progrium/dokku).
 
 This buildpack is modified from Heroku's [Python buildpack](https://github.com/heroku/heroku-buildpack-python) and
@@ -13,7 +13,7 @@ Usage
 
 Example usage:
 
-The only things you should provide is an empty git repo with a `.env` file.
+The only thing you should provide is an empty git repo with a `.env` file.
 
     $ cat .env
     export BB_REPO='https://github.com/buildbot/buildbot'
@@ -21,11 +21,11 @@ The only things you should provide is an empty git repo with a `.env` file.
     export BB_WWW='base'
     export BUILDPACK_URL='https://github.com/shanzi/buildbot-master-buildpack.git'
 
-You can assign different repo, branch and frondend app to install by changing `BB_REPO`,
+You can assign different repo, branch or frondend app to install by changing `BB_REPO`,
 `BB_BRANCH` and `BB_WWW`, which are optional.
  The `BUILDPACK_URL` variable is required to deploy with Dokku.
 
-For deploying on heroku
+For deploying with heroku:
 
     $ heroku create --buildpack git://github.com/shanzi/buildbot-master-buildpack.git
     $ git push heroku master
