@@ -1,8 +1,8 @@
-Heroku buildpack: Buildbot-master
+Buildpack: Buildbot-master
 ========================
 
 This is a buildpack intended to deploy [Buildbot](http://buildbot.net)'s master application on
-[Heroku](https://heroku.com) or VPS equipmented with [Dokku](https://github.com/progrium/dokku).
+[Heroku](https://heroku.com) or VPS equiped with [Dokku](https://github.com/progrium/dokku).
 
 This buildpack is modified from Heroku's [Python buildpack](https://github.com/heroku/heroku-buildpack-python) and
 [NodeJS buildpack](https://github.com/heroku/heroku-buildpack-python). It will install the latest version of Buildbot
