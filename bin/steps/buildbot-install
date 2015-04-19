@@ -24,6 +24,7 @@ git clone -b "$BB_CHECKOUT" "$BB_REPO" "buildbot"
 /app/.heroku/python/bin/pip install -e "buildbot/master" | cleanup | indent
 /app/.heroku/python/bin/pip install -e "buildbot/pkg" | cleanup | indent
 
+puts-step 'Installing buildbot plugins (this may take quite a long time)'
 OLD_IFS=IFS
 IFS=','
 for plugin in $BB_WWW_PLUGINS; do
