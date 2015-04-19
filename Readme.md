@@ -11,8 +11,6 @@ from its Github repo instead of the stable version on PyPI.
 Usage
 -----
 
-Example usage:
-
 The only thing you should provide is an empty git repo with a `.env` file.
 
     $ cat .env
@@ -27,7 +25,14 @@ and `BB_WWW_PLUGINS` can be one or several plugins joined by a `,` with no extra
 
 The `BUILDPACK_URL` variable is required for deploying with Dokku, it should point to this build pack.
 
-For deploying with heroku:
+For deploying with heroku, as heroku forbid empty repo when `git push`, we have to touch a file and commit it.
+If you are using your own `master.cfg`, this place holder file is now needed.
+
+    $ touch BUILDBOT
+    $ git add .
+    $ git commit -m'add a placeholder file'
+
+Then we push it up to heroku.
 
     $ heroku create --buildpack git://github.com/shanzi/buildbot-master-buildpack.git
     $ git push heroku master
@@ -42,7 +47,7 @@ For deploying with heroku:
     -----> Installing buildbot dependencies
     -----> Procfile declares types -> web
 
-Deploying with Dokku is the same easy:
+Deploying with Dokku is a little easier. No placeholder file is needed at all and we just push it up:
     
     $ git remote add dokku dokku@<your server>:buildbot
     $ git push dokku master

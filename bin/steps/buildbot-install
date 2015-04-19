@@ -1,8 +1,13 @@
 # Install dependencies with Pip.
 puts-step "Installing buildbot dependencies"
 
+if [ -f "$BUILD_DIR/.env" ]; then
+    # import user enviroment variables for heroku
+    source "$BUILD_DIR/.env"
+fi
+
 if [ ! "$BB_CHECKOUT" ]; then
-    BB_CHECKOUT = 'master'
+    BB_CHECKOUT='master'
 fi
 
 if [ ! "$BB_REPO" ]; then
