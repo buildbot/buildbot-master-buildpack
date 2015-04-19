@@ -17,13 +17,15 @@ The only thing you should provide is an empty git repo with a `.env` file.
 
     $ cat .env
     export BB_REPO='https://github.com/buildbot/buildbot'
-    export BB_BRANCH='master'
-    export BB_WWW='base'
-    export BUILDPACK_URL='https://github.com/shanzi/buildbot-master-buildpack.git'
+    export BB_CHECKOUT='master'
+    export BB_WWW_PLUGINS='base,waterfall_view'
+    export BUILDPACK_URL='https://github.com/buildbot/buildbot-master-buildpack.git'
 
 You can assign different repo, branch or frondend app to install by changing `BB_REPO`,
-`BB_BRANCH` and `BB_WWW`, which are optional parameters.
- The `BUILDPACK_URL` variable is required for deploying with Dokku.
+`BB_CHECKOUT` and `BB_WWW_PLUGINS`, which are optional parameters. `BB_CHECKOUT` can be branch name or tag name
+and `BB_WWW_PLUGINS` can be one or several plugins joined by a `,` with no extra spaces.
+
+The `BUILDPACK_URL` variable is required for deploying with Dokku, it should point to this build pack.
 
 For deploying with heroku:
 
