@@ -27,7 +27,7 @@ git clone -b "$BB_CHECKOUT" "$BB_REPO" "buildbot"
 OLD_IFS=IFS
 IFS=','
 for plugin in $BB_WWW_PLUGINS; do
-    /app/.heroku/python/bin/pip install -e "buildbot/www/$plugin" | cleanup | indent
+    /app/.heroku/python/bin/pip install -v -e "buildbot/www/$plugin" | cleanup | indent
 done
 IFS=OLD_IFS
 
