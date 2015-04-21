@@ -1,29 +1,36 @@
 # Install dependencies with Pip.
 puts-step "Installing buildbot dependencies"
 
-if [ ! "$BB_BRANCH" ]; then
-    BB_BRANCH = 'master'
+if [ -f "$BUILD_DIR/.env" ]; then
+    # import user enviroment variables for heroku
+    source "$BUILD_DIR/.env"
+fi
+
+if [ ! "$BB_CHECKOUT" ]; then
+    BB_CHECKOUT='master'
 fi
 
 if [ ! "$BB_REPO" ]; then
-    BB_BRANCH='https//github.com/buildbot/buildbot'
+    BB_REPO='https//github.com/buildbot/buildbot'
 fi
 
-if [ ! "$BB_WWW" ]; then
-    BB_WWW='base'
+if [ ! "$BB_WWW_PLUGINS" ]; then
+    BB_WWW_PLUGINS='base'
 fi
 
-if [ -d "buildbot" ]; then
-    git fetch | cleanup | indent
-    git checkout "origin/$BB_BRANCH" -B "$BB_BRANCH" | cleanup | indent
-else
-    git clone -b "$BB_BRANCH" "$BB_REPO" "buildbot"
-fi
+git clone -b "$BB_CHECKOUT" "$BB_REPO" "buildbot"
 
 /app/.heroku/python/bin/pip install mock | cleanup | indent
 /app/.heroku/python/bin/pip install -e "buildbot/master" | cleanup | indent
 /app/.heroku/python/bin/pip install -e "buildbot/pkg" | cleanup | indent
-/app/.heroku/python/bin/pip install -e "buildbot/www/$BB_WWW" | cleanup | indent
+
+puts-step 'Installing buildbot plugins (this may take quite a long time)'
+OLD_IFS=IFS
+IFS=','
+for plugin in $BB_WWW_PLUGINS; do
+    /app/.heroku/python/bin/pip install -v -e "buildbot/www/$plugin" | cleanup | indent
+done
+IFS=OLD_IFS
 
 
 /app/.heroku/python/bin/buildbot create-master master
