@@ -11,7 +11,7 @@ if [ ! "$BB_CHECKOUT" ]; then
 fi
 
 if [ ! "$BB_REPO" ]; then
-    BB_REPO='https//github.com/buildbot/buildbot'
+    BB_REPO='https://github.com/buildbot/buildbot'
 fi
 
 if [ ! "$BB_WWW_PLUGINS" ]; then
