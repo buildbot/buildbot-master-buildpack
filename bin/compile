@@ -168,7 +168,7 @@ set-default-env PYTHONHASHSEED random
 set-default-env PYTHONPATH /app/
 
 # Install sane-default script for WEB_CONCURRENCY environment variable.
-cp $ROOT_DIR/vendor/python.webconcurrency.sh $WEBCONCURRENCY_PROFILE_PATH
+cp "$ROOT_DIR/vendor/python.webconcurrency.sh" "$WEBCONCURRENCY_PROFILE_PATH"
 
 
 # Experimental post_compile hook.
